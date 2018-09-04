@@ -7,7 +7,7 @@ export interface AuthState {
   users: Array<User> | null;
 }
 
-interface AuthAction {
+export interface AuthAction {
   type: string;
   user?: User;
   error?: string;

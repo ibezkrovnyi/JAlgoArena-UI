@@ -11,7 +11,7 @@ export interface SubmissionsState {
     stats: Array<{}>
 }
 
-interface SubmissionsAction {
+export interface SubmissionsAction {
     type: string,
     submissions?: Array<Submission>
     status?: string

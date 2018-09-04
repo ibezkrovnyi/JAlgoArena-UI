@@ -3,13 +3,14 @@
     "moduleResolution": "node",
     "outDir": "./build/public",
     "sourceMap": true,
-    "strictNullChecks": true,
+    "strict": true,
     "module": "commonjs",
     "jsx": "react",
     "target": "es5",
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "skipLibCheck": true,
+    "noErrorTruncation": true,
     "lib": ["dom","es5","scripthost", "es6"]
   },
   "include": [

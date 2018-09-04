@@ -1,12 +1,12 @@
 import * as redux from 'redux';
-import * as types from '../../constants/ActionTypes';
-import {editor, EditorState, problems, ProblemsState} from '../../problems/reducers/index';
-import {auth, AuthState} from '../../users/reducers/index';
-import {ranking, RankingState} from '../../ranking/reducers/index';
-import {submissions, SubmissionsState} from '../../submissions/reducers/index';
+import {ActionTypes} from '../../constants/ActionTypes';
+import {editor, EditorState, EditorAction, problems, ProblemsState, ProblemsAction} from '../../problems/reducers/index';
+import {auth, AuthState, AuthAction} from '../../users/reducers/index';
+import {ranking, RankingState, RankingAction} from '../../ranking/reducers/index';
+import {submissions, SubmissionsState, SubmissionsAction} from '../../submissions/reducers/index';
 import { LOCATION_CHANGE } from 'connected-react-router';
 
-interface Action {
+interface ConfigAction {
     type: string;
     isConnected?: boolean;
     error?: string;
@@ -32,7 +32,16 @@ export interface AppState {
     config: Config
 }
 
-const rootReducer = redux.combineReducers({
+export type Action =
+  | EditorAction
+  | ProblemsAction
+  | AuthAction
+  | SubmissionsAction
+  | RankingAction
+  | ErrorMessageAction
+  | ConfigAction
+
+const rootReducer = redux.combineReducers<AppState, Action>({
   editor,
   problems,
   auth,
@@ -43,9 +52,9 @@ const rootReducer = redux.combineReducers({
   config,
 });
 
-export function webSocketConnected(state: boolean = false, action: Action) {
+export function webSocketConnected(state: boolean = false, action: ConfigAction) {
   switch (action.type) {
-    case types.WEBSOCKET_CONNECTED:
+    case ActionTypes.WEBSOCKET_CONNECTED:
       return action.isConnected;
     default:
       return state;
@@ -60,23 +69,30 @@ export function config(
     teams: ['Team A', 'Team B', 'Team C'],
     regions: ['Kraków', 'Wrocław'],
   },
-  action: Action,
+  action: ConfigAction,
 ) {
   switch (action.type) {
-    case types.UPDATE_CONFIG:
+    case ActionTypes.UPDATE_CONFIG:
       return action.config;
     default:
       return state;
   }
 }
 
+type ErrorMessageState = string | null;
+
+interface ErrorMessageAction {
+  type: string
+  error: string | null
+}
+
 export function errorMessage(
-    state: string | undefined | null = null,
-    action: { type: string; error: string | null }
+    state: ErrorMessageState | undefined = null,
+    action: ErrorMessageAction
 ) {
   const { type, error } = action;
 
-  if (type === types.RESET_ERROR_MESSAGE || type === LOCATION_CHANGE) {
+  if (type === ActionTypes.RESET_ERROR_MESSAGE || type === LOCATION_CHANGE) {
     return null;
   } else if (error) {
     return error;

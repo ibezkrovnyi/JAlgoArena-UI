@@ -10,7 +10,7 @@ export interface RankingState {
     refreshInProgress: boolean
 }
 
-interface RankingAction {
+export interface RankingAction {
     type: string
     ranking?: Array<RankingEntry>
     previousRanking?: Array<RankingEntry>
